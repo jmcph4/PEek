@@ -4,11 +4,10 @@ PEek is a command-line PE file viewer written in C. So far it's very limited in 
 
 ## Features ##
 ### Current ###
-- View (most) of the PE file header (except the `Characteristics` field for now)
+- View the PE file header
 - View (most) of the PE file optional header (except the `DllCharacteristics` field for now)
 
 ### Planned ###
-- View *all* of the PE file header
 - View *all* of the PE file optional header
 - View all of the sections
 - Have different modes

@@ -3,16 +3,16 @@
 #include <time.h>
 #include <string.h>
 
-#include "headers.h"
-#include "utils.h"
-#include "codes.h"
+#include "include\headers.h"
+#include "include\utils.h"
+#include "include\codes.h"
 
 int main(int argc, char** argv)
 {
   if(argc < 2)
   {
     // usage
-	printf("Usage: %s file\n", argv[0]);
+  printf("Usage: %s file\n", argv[0]);
   }
 
   const char* filename = argv[1];
@@ -88,10 +88,11 @@ int main(int argc, char** argv)
   printf("Machine: %s\n", read_machine_type(u.pe_head));
   printf("NumberOfSections: %i\n", u.pe_head->NumberOfSections);
   printf("TimeDateStamp: %s", ctime(&timestamp));
-  printf("\b\bPointerToSymbolTable: %#x\n", u.pe_head->PointerToSymbolTable);
+  printf("PointerToSymbolTable: %#x\n", u.pe_head->PointerToSymbolTable);
   printf("NumberOfSymbols: %i\n", u.pe_head->NumberOfSymbols);
   printf("SizeOfOptionalHeader: %i\n", u.pe_head->SizeOfOptionalHeader);
-  //printf("Characteristics: %s\n", read_characteristics(u.pe_head));
+  printf("Characteristics:\n");
+  print_characteristics(read_characteristics(u.pe_head));
 
   if(u.pe_head->SizeOfOptionalHeader > 0)
   {
