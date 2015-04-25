@@ -1,1 +1,1 @@
-This folder contains the source code for PEek.
+This directory contains the source code for PEek.

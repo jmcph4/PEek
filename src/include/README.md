@@ -1,1 +1,0 @@
-This folder contains the header files for the PEek source code.

@@ -282,7 +282,118 @@ void print_characteristics(int* flags)
     printf("\n");
   }
 
-  free(flags); // free the heap memory we declared in read_characteristics
+  //free(flags); // free the heap memory we declared in read_characteristics
+}
+
+int* read_dll_characteristics_pe32(PE_Optional_Header* pe_opt_head)
+{
+  int* flags = (int*)malloc(16);
+  int i = 0;
+  int is_set = 0;
+  
+  for(i=0;i<16;i++)
+  {
+    if((pe_opt_head->DllCharacteristics & (1 << i)) == (1 << i))
+    {
+      flags[i] = 1;
+    }
+  }
+
+  return flags;
+}
+
+int* read_dll_characteristics_pe32_plus(PE_Optional_Header_Plus* pe_opt_head)
+{
+  int* flags = (int*)malloc(16);
+  int i = 0;
+  int is_set = 0;
+  
+  for(i=0;i<16;i++)
+  {
+    if((pe_opt_head->DllCharacteristics & (1 << i)) == (1 << i))
+    {
+      flags[i] = 1;
+    }
+  }
+
+  return flags;
+}
+
+void print_dll_characteristics(int* flags)
+{
+  if(flags[(int)log2(DLLCHARACTERISTICS_reserved1)] == 1)
+  {
+    printf("(reserved)\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_reserved2)] == 1)
+  {
+    printf("(reserved)\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_reserved3)] == 1)
+  {
+    printf("(reserved)\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_reserved4)] == 1)
+  {
+    printf("(reserved)\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_DYNAMIC_BASE)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE);
+    printf("\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_FORCE_INTEGRITY)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY);
+    printf("\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_NX_COMPAT)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_NX_COMPAT);
+    printf("\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_NO_ISOLATION)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_NO_ISOLATION);
+    printf("\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_NO_SEH)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_NO_SEH);
+    printf("\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_NO_BIND)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_NO_BIND);
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_reserved5)] == 1)
+  {
+    printf("(reserved)\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_WDM_DRIVER)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_WDM_DRIVER);
+    printf("\n");
+  }
+
+  if(flags[(int)log2(DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE)] == 1)
+  {
+    printf(IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE);
+    printf("\n");
+  }
+
+  //free(flags); // free the heap memory we declared in read_dll_characteristics
 }
 
 #endif // UTILS_H_

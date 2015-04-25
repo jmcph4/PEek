@@ -3,16 +3,16 @@
 #include <time.h>
 #include <string.h>
 
-#include "include\headers.h"
-#include "include\utils.h"
-#include "include\codes.h"
+#include "..\include\headers.h"
+#include "..\include\utils.h"
+#include "..\include\codes.h"
 
 int main(int argc, char** argv)
 {
   if(argc < 2)
   {
     // usage
-  printf("Usage: %s file\n", argv[0]);
+	printf("Usage: %s file\n", argv[0]);
   }
 
   const char* filename = argv[1];
@@ -84,6 +84,7 @@ int main(int argc, char** argv)
 
   time_t timestamp = (time_t)u.pe_head->TimeDateStamp;
 
+  printf("%s:\n\n", argv[1]);
   printf("PE HEADER INFORMATION\n");
   printf("Machine: %s\n", read_machine_type(u.pe_head));
   printf("NumberOfSections: %i\n", u.pe_head->NumberOfSections);
@@ -146,7 +147,8 @@ int main(int argc, char** argv)
       printf("SizeOfHeaders: %i\n", w.pe_opt_head->SizeOfHeaders);
       printf("CheckSum: %i\n", w.pe_opt_head->CheckSum);
       printf("Subsystem: %s\n", read_windows_subsystem_pe32(w.pe_opt_head));
-      // DLL characteristics
+      printf("DLLCharacteristics:\n");
+      print_dll_characteristics(read_dll_characteristics_pe32(w.pe_opt_head));
       printf("SizeOfStackReserve: %i\n", w.pe_opt_head->SizeOfStackReserve);
       printf("SizeOfStackCommit: %i\n", w.pe_opt_head->SizeOfStackCommit);
       printf("SizeOfHeapReserve: %i\n", w.pe_opt_head->SizeOfHeapReserve);
@@ -188,7 +190,8 @@ int main(int argc, char** argv)
       printf("SizeOfHeaders: %i\n", w.pe_opt_head->SizeOfHeaders);
       printf("CheckSum: %i\n", w.pe_opt_head->CheckSum);
       printf("Subsystem: %s\n", read_windows_subsystem_pe32_plus(w.pe_opt_head));
-      // DLL characteristics
+      printf("DLLCharacteristics:\n");
+      print_dll_characteristics(read_dll_characteristics_pe32_plus(w.pe_opt_head));
       printf("SizeOfStackReserve: %i\n", w.pe_opt_head->SizeOfStackReserve);
       printf("SizeOfStackCommit: %i\n", w.pe_opt_head->SizeOfStackCommit);
       printf("SizeOfHeapReserve: %i\n", w.pe_opt_head->SizeOfHeapReserve);
