@@ -1,1 +1,0 @@
-This directory contains the build output for PEek (namely, the PEek executable).

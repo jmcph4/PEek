@@ -3,9 +3,9 @@
 #include <time.h>
 #include <string.h>
 
-#include "..\include\headers.h"
-#include "..\include\utils.h"
-#include "..\include\codes.h"
+#include "headers.h"
+#include "utils.h"
+#include "codes.h"
 
 int main(int argc, char** argv)
 {

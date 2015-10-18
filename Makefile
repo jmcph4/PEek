@@ -1,20 +1,12 @@
-SDIR=/src
-IDIR =/include
-CC=gcc
-CFLAGS=-I$(IDIR)
-BDIR=/bin
-_DEPS = headers.h codes.h utils.h
-DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
-_OBJ = main.o
-OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+PROJ_NAME = PEek
+SRC_DIR = src
+BIN_DIR = bin
+CC = gcc
 
-$(BDIR)/%.o: $(SDIR)/%.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-$(BDIR)/PEek: $(OBJ)
-	gcc -o $@ $^ $(CFLAGS)
+$(PROJ_NAME):
+	$(CC) -o $(BIN_DIR)/$(PROJ_NAME) $(SRC_DIR)/*.c -Wall -Wextra -Wshadow -pedantic-errors -std=c11
 
 .PHONY: clean
 
 clean:
-	rm -f $(BDIR)/*.o *~ core $(INCDIR)/*~
+	rm $(BIN_DIR)/$(PROJ_NAME) -r
