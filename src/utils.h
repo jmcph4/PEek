@@ -16,7 +16,7 @@ char* read_machine_type(PE_Header* pe_head)
     case 0x1d3:
       return IMAGE_FILE_MACHINE_AM33;
       break;
-    case -31132:
+    case 0x8664:
       return IMAGE_FILE_MACHINE_AMD64;
       break;
     case 0x1c0:
@@ -172,7 +172,6 @@ int* read_characteristics(PE_Header* pe_head)
 {
   int* flags = (int*)malloc(16);
   int i = 0;
-  int is_set = 0;
   
   for(i=0;i<16;i++)
   {
@@ -289,7 +288,6 @@ int* read_dll_characteristics_pe32(PE_Optional_Header* pe_opt_head)
 {
   int* flags = (int*)malloc(16);
   int i = 0;
-  int is_set = 0;
   
   for(i=0;i<16;i++)
   {
@@ -306,7 +304,6 @@ int* read_dll_characteristics_pe32_plus(PE_Optional_Header_Plus* pe_opt_head)
 {
   int* flags = (int*)malloc(16);
   int i = 0;
-  int is_set = 0;
   
   for(i=0;i<16;i++)
   {

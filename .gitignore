@@ -36,3 +36,5 @@ tmp/*
 obj/*
 *.secret
 *.tmp
+
+msg.tmp

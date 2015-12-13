@@ -6,7 +6,7 @@
 typedef struct PE_Header
 {
   char sig[4 * sizeof(char)]; // 4B
-  short Machine; // 2B
+  unsigned short Machine; // 2B
   short NumberOfSections; // 2B
   int TimeDateStamp; // 4B
   int PointerToSymbolTable; // 4B
@@ -14,6 +14,12 @@ typedef struct PE_Header
   short SizeOfOptionalHeader; // 2B
   short Characteristics; // 2B
 } PE_Header;
+
+typedef struct PE_Data_Directory
+{
+  int RVA;
+  int Size;
+} PE_Data_Directory;
 
 typedef struct PE_Optional_Header
 {
@@ -52,22 +58,22 @@ typedef struct PE_Optional_Header
   int NumberOfRvaAndSizes;
 
   // data directories
-  long ExportTable;
-  long ImportTable;
-  long ResourceTable;
-  long ExceptionTable;
-  long CertificateTable;
-  long BaseRelocationTable;
-  long Debug;
-  long Architecture;
-  long GlobalPtr;
-  long TLSTable;
-  long LoadConfigTable;
-  long BoundImport;
-  long IAT;
-  long DelayImportDescriptor;
-  long CLRRuntimeHeader;
-  long reserved;
+  PE_Data_Directory ExportTable;
+  PE_Data_Directory ImportTable;
+  PE_Data_Directory ResourceTable;
+  PE_Data_Directory ExceptionTable;
+  PE_Data_Directory CertificateTable;
+  PE_Data_Directory BaseRelocationTable;
+  PE_Data_Directory Debug;
+  PE_Data_Directory Architecture;
+  PE_Data_Directory GlobalPtr;
+  PE_Data_Directory TLSTable;
+  PE_Data_Directory LoadConfigTable;
+  PE_Data_Directory BoundImport;
+  PE_Data_Directory IAT;
+  PE_Data_Directory DelayImportDescriptor;
+  PE_Data_Directory CLRRuntimeHeader;
+  PE_Data_Directory reserved;
 } PE_Optional_Header;
 
 typedef struct PE_Optional_Header_Plus
@@ -107,21 +113,21 @@ typedef struct PE_Optional_Header_Plus
   int NumberOfRvaAndSizes;
 
   // data directories
-  long ExportTable;
-  long ImportTable;
-  long ResourceTable;
-  long ExceptionTable;
-  long CertificateTable;
-  long BaseRelocationTable;
-  long Debug;
-  long Architecture;
-  long GlobalPtr;
-  long TLSTable;
-  long LoadConfigTable;
-  long BoundImport;
-  long IAT;
-  long DelayImportDescriptor;
-  long CLRRuntimeHeader;
-  long reserved;
+  PE_Data_Directory ExportTable;
+  PE_Data_Directory ImportTable;
+  PE_Data_Directory ResourceTable;
+  PE_Data_Directory ExceptionTable;
+  PE_Data_Directory CertificateTable;
+  PE_Data_Directory BaseRelocationTable;
+  PE_Data_Directory Debug;
+  PE_Data_Directory Architecture;
+  PE_Data_Directory GlobalPtr;
+  PE_Data_Directory TLSTable;
+  PE_Data_Directory LoadConfigTable;
+  PE_Data_Directory BoundImport;
+  PE_Data_Directory IAT;
+  PE_Data_Directory DelayImportDescriptor;
+  PE_Data_Directory CLRRuntimeHeader;
+  PE_Data_Directory reserved;
 } PE_Optional_Header_Plus;
 #endif // HEADERS_H_
