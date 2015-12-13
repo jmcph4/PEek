@@ -12,7 +12,7 @@ int main(int argc, char** argv)
   if(argc < 2)
   {
     // usage
-	printf("Usage: %s file\n", argv[0]);
+    printf("Usage: %s file\n", argv[0]);
   }
 
   const char* filename = argv[1];
@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 
   if(!file)
   {
-    fprintf(stderr, "Failed to open file.\n");
+    fprintf(stderr, "[ERROR] Failed to open file.\n");
 
     return EXIT_FAILURE;
   }
@@ -35,19 +35,19 @@ int main(int argc, char** argv)
 
   if(data == NULL)
   {
-    fprintf(stderr, "Failed to allocate memory.\n");
+    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
   }
 
   int bytes_read = fread(data, sizeof(char), size, file);
 
   if(bytes_read < size)
   {
-    perror("Failed to read file.\n");
+    fprintf(stderr, "[ERROR] Failed to read file.\n");
   }
 
   if(size <= 133) // minimum size for a valid PE file
   {
-    printf("Not a valid PE file.\n");
+    fprintf(stderr, "[ERROR] Not a valid PE file.\n");
     return EXIT_SUCCESS;
   }
 
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 
   if((*t.num + 3) > size) // check bounds
   {
-    printf("Not a valid PE file.\n");
+    fprintf(stderr, "[ERROR] Not a valid PE file.\n");
     return EXIT_SUCCESS;
   }
 
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
 
   if(strcmp(pe_sig, "PE") != 0)
   {
-    printf("Not a valid PE file.\n");
+    fprintf(stderr, "[ERROR] Not a valid PE file.\n");
     return EXIT_SUCCESS;
   }
 
@@ -298,7 +298,6 @@ int main(int argc, char** argv)
       printf("    RVA: %#x\n", w.pe_opt_head->reserved.RVA);
       printf("    Size: %d\n", w.pe_opt_head->reserved.Size);
     }
-    
   }
 
   free(data);

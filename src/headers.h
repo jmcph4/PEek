@@ -17,45 +17,45 @@ typedef struct PE_Header
 
 typedef struct PE_Data_Directory
 {
-  int RVA;
-  int Size;
+  unsigned int RVA;
+  unsigned int Size;
 } PE_Data_Directory;
 
 typedef struct PE_Optional_Header
 {
   // standard fields
-  short Magic;
-  char MajorLinkerVersion;
-  char MinorLinkerVersion;
-  int SizeOfCode;
-  int SizeOfInitializedData;
-  int SizeOfUninitializedData;
-  int AddressOfEntryPoint;
-  int BaseOfCode;
-  int BaseOfData;
+  unsigned short Magic;
+  unsigned char MajorLinkerVersion;
+  unsigned char MinorLinkerVersion;
+  unsigned int SizeOfCode;
+  unsigned int SizeOfInitializedData;
+  unsigned int SizeOfUninitializedData;
+  unsigned int AddressOfEntryPoint;
+  unsigned int BaseOfCode;
+  unsigned int BaseOfData;
 
   // Windows-specific
-  int ImageBase;
-  int SectionAlignment;
-  int FileAlignment;
-  short MajorOperatingSystemVersion;
-  short MinorOperatingSystemVersion;
-  short MajorImageVersion;
-  short MinorImageVersion;
-  short MajorSubsystemVersion;
-  short MinorSubsystemVersion;
-  int Win32VersionValue;
-  int SizeOfImage;
-  int SizeOfHeaders;
-  int CheckSum;
-  short Subsystem;
-  short DllCharacteristics;
-  int SizeOfStackReserve;
-  int SizeOfStackCommit;
-  int SizeOfHeapReserve;
-  int SizeOfHeapCommit;
-  int LoaderFlags;
-  int NumberOfRvaAndSizes;
+  unsigned int ImageBase;
+  unsigned int SectionAlignment;
+  unsigned int FileAlignment;
+  unsigned short MajorOperatingSystemVersion;
+  unsigned short MinorOperatingSystemVersion;
+  unsigned short MajorImageVersion;
+  unsigned short MinorImageVersion;
+  unsigned short MajorSubsystemVersion;
+  unsigned short MinorSubsystemVersion;
+  unsigned int Win32VersionValue;
+  unsigned int SizeOfImage;
+  unsigned int SizeOfHeaders;
+  unsigned int CheckSum;
+  unsigned short Subsystem;
+  unsigned short DllCharacteristics;
+  unsigned int SizeOfStackReserve;
+  unsigned int SizeOfStackCommit;
+  unsigned int SizeOfHeapReserve;
+  unsigned int SizeOfHeapCommit;
+  unsigned int LoaderFlags;
+  unsigned int NumberOfRvaAndSizes;
 
   // data directories
   PE_Data_Directory ExportTable;
@@ -79,38 +79,38 @@ typedef struct PE_Optional_Header
 typedef struct PE_Optional_Header_Plus
 {
   // standard fields
-  short Magic;
-  char MajorLinkerVersion;
-  char MinorLinkerVersion;
-  int SizeOfCode;
-  int SizeOfInitializedData;
-  int SizeOfUninitializedData;
-  int AddressOfEntryPoint;
-  int BaseOfCode;
-  int BaseOfData;
+  unsigned short Magic;
+  unsigned char MajorLinkerVersion;
+  unsigned char MinorLinkerVersion;
+  unsigned int SizeOfCode;
+  unsigned int SizeOfInitializedData;
+  unsigned int SizeOfUninitializedData;
+  unsigned int AddressOfEntryPoint;
+  unsigned int BaseOfCode;
+  unsigned int BaseOfData;
 
   // Windows-specific
-  long ImageBase;
-  int SectionAlignment;
-  int FileAlignment;
-  short MajorOperatingSystemVersion;
-  short MinorOperatingSystemVersion;
-  short MajorImageVersion;
-  short MinorImageVersion;
-  short MajorSubsystemVersion;
-  short MinorSubsystemVersion;
-  int Win32VersionValue;
-  int SizeOfImage;
-  int SizeOfHeaders;
-  int CheckSum;
-  short Subsystem;
-  short DllCharacteristics;
-  long SizeOfStackReserve;
-  long SizeOfStackCommit;
-  long SizeOfHeapReserve;
-  long SizeOfHeapCommit;
-  int LoaderFlags;
-  int NumberOfRvaAndSizes;
+  unsigned long ImageBase;
+  unsigned int SectionAlignment;
+  unsigned int FileAlignment;
+  unsigned short MajorOperatingSystemVersion;
+  unsigned short MinorOperatingSystemVersion;
+  unsigned short MajorImageVersion;
+  unsigned short MinorImageVersion;
+  unsigned short MajorSubsystemVersion;
+  unsigned short MinorSubsystemVersion;
+  unsigned int Win32VersionValue;
+  unsigned int SizeOfImage;
+  unsigned int SizeOfHeaders;
+  unsigned int CheckSum;
+  unsigned short Subsystem;
+  unsigned short DllCharacteristics;
+  unsigned long SizeOfStackReserve;
+  unsigned long SizeOfStackCommit;
+  unsigned long SizeOfHeapReserve;
+  unsigned long SizeOfHeapCommit;
+  unsigned int LoaderFlags;
+  unsigned int NumberOfRvaAndSizes;
 
   // data directories
   PE_Data_Directory ExportTable;
