@@ -2,10 +2,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <inttypes.h>
+
+#define __STDC_FORMAT_MACROS
 
 #include "headers.h"
 #include "utils.h"
 #include "codes.h"
+
 
 int main(int argc, char** argv)
 {
@@ -225,7 +229,7 @@ int main(int argc, char** argv)
       printf("SizeOfUninitializedData: %d\n", w.pe_opt_head->SizeOfUninitializedData);
       printf("AddressOfEntryPoint: %#x\n", w.pe_opt_head->AddressOfEntryPoint);
       printf("BaseOfCode: %#x\n", w.pe_opt_head->BaseOfCode);
-      printf("ImageBase: %#lx\n", w.pe_opt_head->ImageBase);
+      printf("ImageBase: %" PRId64 "x\n", w.pe_opt_head->ImageBase);
       printf("\n");
       printf("SectionAlignment: %d\n", w.pe_opt_head->SectionAlignment);
       printf("FileAlignment: %d\n", w.pe_opt_head->FileAlignment);
@@ -242,9 +246,9 @@ int main(int argc, char** argv)
       printf("Subsystem: %s\n", read_windows_subsystem_pe32_plus(w.pe_opt_head));
       printf("DLLCharacteristics:\n");
       print_dll_characteristics(read_dll_characteristics_pe32_plus(w.pe_opt_head));
-      printf("SizeOfStackReserve: %ld\n", w.pe_opt_head->SizeOfStackReserve);
-      printf("SizeOfStackCommit: %ld\n", w.pe_opt_head->SizeOfStackCommit);
-      printf("SizeOfHeapReserve: %ld\n", w.pe_opt_head->SizeOfHeapReserve);
+      printf("SizeOfStackReserve: %" PRId64 "\n", w.pe_opt_head->SizeOfStackReserve);
+      printf("SizeOfStackCommit: %" PRId64 "\n", w.pe_opt_head->SizeOfStackCommit);
+      printf("SizeOfHeapReserve: %" PRId64 "\n", w.pe_opt_head->SizeOfHeapReserve);
       printf("LoaderFlags: %d\n", w.pe_opt_head->LoaderFlags);
       printf("NumberOfRvaAndSizes: %d\n", w.pe_opt_head->NumberOfRvaAndSizes);
       

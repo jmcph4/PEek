@@ -1,61 +1,64 @@
 #ifndef HEADERS_H_
 #define HEADERS_H_
+
+#include <stdint.h>
+
 // Deviating from my usual snake_case style solely to closely match the MS spec
 // http://download.microsoft.com/download/e/b/a/eba1050f-a31d-436b-9281-92cdfe
 // ae4b45/pecoff.doc
 typedef struct PE_Header
 {
-  char sig[4 * sizeof(char)]; // 4B
-  unsigned short Machine; // 2B
-  short NumberOfSections; // 2B
-  int TimeDateStamp; // 4B
-  int PointerToSymbolTable; // 4B
-  int NumberOfSymbols; // 4B
-  short SizeOfOptionalHeader; // 2B
-  short Characteristics; // 2B
+  uint8_t sig[4 * sizeof(char)]; // 4B
+  uint16_t Machine; // 2B
+  uint16_t NumberOfSections; // 2B
+  uint32_t TimeDateStamp; // 4B
+  uint32_t PointerToSymbolTable; // 4B
+  uint32_t NumberOfSymbols; // 4B
+  uint16_t SizeOfOptionalHeader; // 2B
+  uint16_t Characteristics; // 2B
 } PE_Header;
 
 typedef struct PE_Data_Directory
 {
-  unsigned int RVA;
-  unsigned int Size;
+  uint32_t RVA;
+  uint32_t Size;
 } PE_Data_Directory;
 
 typedef struct PE_Optional_Header
 {
   // standard fields
-  unsigned short Magic;
-  unsigned char MajorLinkerVersion;
-  unsigned char MinorLinkerVersion;
-  unsigned int SizeOfCode;
-  unsigned int SizeOfInitializedData;
-  unsigned int SizeOfUninitializedData;
-  unsigned int AddressOfEntryPoint;
-  unsigned int BaseOfCode;
-  unsigned int BaseOfData;
+  uint16_t Magic;
+  uint8_t MajorLinkerVersion;
+  uint8_t MinorLinkerVersion;
+  uint32_t SizeOfCode;
+  uint32_t SizeOfInitializedData;
+  uint32_t SizeOfUninitializedData;
+  uint32_t AddressOfEntryPoint;
+  uint32_t BaseOfCode;
+  uint32_t BaseOfData;
 
   // Windows-specific
-  unsigned int ImageBase;
-  unsigned int SectionAlignment;
-  unsigned int FileAlignment;
-  unsigned short MajorOperatingSystemVersion;
-  unsigned short MinorOperatingSystemVersion;
-  unsigned short MajorImageVersion;
-  unsigned short MinorImageVersion;
-  unsigned short MajorSubsystemVersion;
-  unsigned short MinorSubsystemVersion;
-  unsigned int Win32VersionValue;
-  unsigned int SizeOfImage;
-  unsigned int SizeOfHeaders;
-  unsigned int CheckSum;
-  unsigned short Subsystem;
-  unsigned short DllCharacteristics;
-  unsigned int SizeOfStackReserve;
-  unsigned int SizeOfStackCommit;
-  unsigned int SizeOfHeapReserve;
-  unsigned int SizeOfHeapCommit;
-  unsigned int LoaderFlags;
-  unsigned int NumberOfRvaAndSizes;
+  uint32_t ImageBase;
+  uint32_t SectionAlignment;
+  uint32_t FileAlignment;
+  uint16_t MajorOperatingSystemVersion;
+  uint16_t MinorOperatingSystemVersion;
+  uint16_t MajorImageVersion;
+  uint16_t MinorImageVersion;
+  uint16_t MajorSubsystemVersion;
+  uint16_t MinorSubsystemVersion;
+  uint32_t Win32VersionValue;
+  uint32_t SizeOfImage;
+  uint32_t SizeOfHeaders;
+  uint32_t CheckSum;
+  uint16_t Subsystem;
+  uint16_t DllCharacteristics;
+  uint32_t SizeOfStackReserve;
+  uint32_t SizeOfStackCommit;
+  uint32_t SizeOfHeapReserve;
+  uint32_t SizeOfHeapCommit;
+  uint32_t LoaderFlags;
+  uint32_t NumberOfRvaAndSizes;
 
   // data directories
   PE_Data_Directory ExportTable;
@@ -79,38 +82,38 @@ typedef struct PE_Optional_Header
 typedef struct PE_Optional_Header_Plus
 {
   // standard fields
-  unsigned short Magic;
-  unsigned char MajorLinkerVersion;
-  unsigned char MinorLinkerVersion;
-  unsigned int SizeOfCode;
-  unsigned int SizeOfInitializedData;
-  unsigned int SizeOfUninitializedData;
-  unsigned int AddressOfEntryPoint;
-  unsigned int BaseOfCode;
-  unsigned int BaseOfData;
+  uint16_t Magic;
+  uint8_t MajorLinkerVersion;
+  uint8_t MinorLinkerVersion;
+  uint32_t SizeOfCode;
+  uint32_t SizeOfInitializedData;
+  uint32_t SizeOfUninitializedData;
+  uint32_t AddressOfEntryPoint;
+  uint32_t BaseOfCode;
+  uint32_t BaseOfData;
 
   // Windows-specific
-  unsigned long ImageBase;
-  unsigned int SectionAlignment;
-  unsigned int FileAlignment;
-  unsigned short MajorOperatingSystemVersion;
-  unsigned short MinorOperatingSystemVersion;
-  unsigned short MajorImageVersion;
-  unsigned short MinorImageVersion;
-  unsigned short MajorSubsystemVersion;
-  unsigned short MinorSubsystemVersion;
-  unsigned int Win32VersionValue;
-  unsigned int SizeOfImage;
-  unsigned int SizeOfHeaders;
-  unsigned int CheckSum;
-  unsigned short Subsystem;
-  unsigned short DllCharacteristics;
-  unsigned long SizeOfStackReserve;
-  unsigned long SizeOfStackCommit;
-  unsigned long SizeOfHeapReserve;
-  unsigned long SizeOfHeapCommit;
-  unsigned int LoaderFlags;
-  unsigned int NumberOfRvaAndSizes;
+  uint64_t ImageBase;
+  uint32_t SectionAlignment;
+  uint32_t FileAlignment;
+  uint16_t MajorOperatingSystemVersion;
+  uint16_t MinorOperatingSystemVersion;
+  uint16_t MajorImageVersion;
+  uint16_t MinorImageVersion;
+  uint16_t MajorSubsystemVersion;
+  uint16_t MinorSubsystemVersion;
+  uint32_t Win32VersionValue;
+  uint32_t SizeOfImage;
+  uint32_t SizeOfHeaders;
+  uint32_t CheckSum;
+  uint16_t Subsystem;
+  uint16_t DllCharacteristics;
+  uint64_t SizeOfStackReserve;
+  uint64_t SizeOfStackCommit;
+  uint64_t SizeOfHeapReserve;
+  uint64_t SizeOfHeapCommit;
+  uint32_t LoaderFlags;
+  uint32_t NumberOfRvaAndSizes;
 
   // data directories
   PE_Data_Directory ExportTable;
