@@ -6,80 +6,82 @@
 #include "codes.h"
 
 // Returns a C string containing a human-readable description of machine type
-char* read_machine_type(PE_Header* pe_head)
+int read_machine_type(PE_Header* pe_head, char* machine_type)
 {
   switch(pe_head->Machine)
   {
     case 0x0:
-      return IMAGE_FILE_MACHINE_UNKNOWN;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_UNKNOWN, strlen(IMAGE_FILE_MACHINE_UNKNOWN));
       break;
     case 0x1d3:
-      return IMAGE_FILE_MACHINE_AM33;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_AM33, strlen(IMAGE_FILE_MACHINE_AM33));
       break;
     case 0x8664:
-      return IMAGE_FILE_MACHINE_AMD64;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_AMD64, strlen(IMAGE_FILE_MACHINE_AMD64));
       break;
     case 0x1c0:
-      return IMAGE_FILE_MACHINE_ARM;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_ARM, strlen(IMAGE_FILE_MACHINE_ARM));
       break;
     case 0x1c4:
-      return IMAGE_FILE_MACHINE_ARMNT;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_ARMNT, strlen(IMAGE_FILE_MACHINE_ARMNT));
       break;
     case 0xaa64:
-      return IMAGE_FILE_MACHINE_ARM64;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_ARM64, strlen(IMAGE_FILE_MACHINE_ARM64));
       break;
     case 0xebc:
-      return IMAGE_FILE_MACHINE_EBC;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_EBC, strlen(IMAGE_FILE_MACHINE_EBC));
       break;
     case 0x14c:
-      return IMAGE_FILE_MACHINE_I386;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_I386, strlen(IMAGE_FILE_MACHINE_I386));
       break;
     case 0x200:
-      return IMAGE_FILE_MACHINE_IA64;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_IA64, strlen(IMAGE_FILE_MACHINE_IA64));
       break;
     case 0x9041:
-      return IMAGE_FILE_MACHINE_M32R;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_M32R, strlen(IMAGE_FILE_MACHINE_M32R));
       break;
     case 0x266:
-      return IMAGE_FILE_MACHINE_MIPS16;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_MIPS16, strlen(IMAGE_FILE_MACHINE_MIPS16));
       break;
     case 0x366:
-      return IMAGE_FILE_MACHINE_MIPSFPU;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_MIPSFPU, strlen(IMAGE_FILE_MACHINE_MIPSFPU));
       break;
     case 0x466:
-      return IMAGE_FILE_MACHINE_MIPSFPU16;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_MIPSFPU16, strlen(IMAGE_FILE_MACHINE_MIPSFPU16));
       break;
     case 0x1f0:
-      return IMAGE_FILE_MACHINE_POWERPC;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_POWERPC, strlen(IMAGE_FILE_MACHINE_POWERPC));
       break;
     case 0x1f1:
-      return IMAGE_FILE_MACHINE_POWERPCFP;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_POWERPCFP, strlen(IMAGE_FILE_MACHINE_POWERPCFP));
       break;
     case 0x166:
-      return IMAGE_FILE_MACHINE_R4000;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_R4000, strlen(IMAGE_FILE_MACHINE_R4000));
       break;
     case 0x1a2:
-      return IMAGE_FILE_MACHINE_SH3;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_SH3, strlen(IMAGE_FILE_MACHINE_SH3));
       break;
     case 0x1a3:
-      return IMAGE_FILE_MACHINE_SH3DSP;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_SH3DSP, strlen(IMAGE_FILE_MACHINE_SH3DSP));
       break;
     case 0x1a6:
-      return IMAGE_FILE_MACHINE_SH4;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_SH4, strlen(IMAGE_FILE_MACHINE_SH4));
       break;
     case 0x1a8:
-      return IMAGE_FILE_MACHINE_SH5;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_SH5, strlen(IMAGE_FILE_MACHINE_SH5));
       break;
     case 0x1c2:
-      return IMAGE_FILE_MACHINE_THUMB;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_THUMB, strlen(IMAGE_FILE_MACHINE_THUMB));
       break;
     case 0x169:
-      return IMAGE_FILE_MACHINE_WCEMIPSV2;
+      strncpy(machine_type,  IMAGE_FILE_MACHINE_WCEMIPSV2, strlen(IMAGE_FILE_MACHINE_WCEMIPSV2));
       break;
     default:
-      return "...";
+      strncpy(machine_type,  "...", strlen("..."));
       break;
   }
+  
+  return EXIT_SUCCESS;
 }
 
 char* read_windows_subsystem_pe32(PE_Optional_Header* pe_opt_head)
@@ -168,20 +170,27 @@ char* read_windows_subsystem_pe32_plus(PE_Optional_Header_Plus* pe_opt_head)
   }
 }
 
-int* read_characteristics(PE_Header* pe_head)
+int read_characteristics(PE_Header* pe_head, int* characteristics)
 {
-  int* flags = (int*)malloc(16);
+  //characteristics = malloc(sizeof(uint32_t) * 16);
+  
+  if(characteristics == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    return EXIT_FAILURE;
+  }
+    
   int i = 0;
   
   for(i=0;i<16;i++)
   {
     if((pe_head->Characteristics & (1 << i)) == (1 << i))
     {
-      flags[i] = 1;
+      characteristics[i] = 1;
     }
   }
-
-  return flags;
+  
+  return EXIT_SUCCESS;
 }
 
 void print_characteristics(int* flags)
@@ -284,36 +293,51 @@ void print_characteristics(int* flags)
   //free(flags); // free the heap memory we declared in read_characteristics
 }
 
-int* read_dll_characteristics_pe32(PE_Optional_Header* pe_opt_head)
+int read_dll_characteristics_pe32(PE_Optional_Header* pe_opt_head, int* characteristics)
 {
-  int* flags = (int*)malloc(16);
+  // characteristics = malloc(sizeof(uint32_t) * 16);
+  
+  if(characteristics == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    
+    return EXIT_FAILURE;
+  }
+  
   int i = 0;
   
   for(i=0;i<16;i++)
   {
     if((pe_opt_head->DllCharacteristics & (1 << i)) == (1 << i))
     {
-      flags[i] = 1;
+      characteristics[i] = 1;
     }
   }
 
-  return flags;
+  return EXIT_SUCCESS;
 }
 
-int* read_dll_characteristics_pe32_plus(PE_Optional_Header_Plus* pe_opt_head)
+int read_dll_characteristics_pe32_plus(PE_Optional_Header_Plus* pe_opt_head, int* characteristics)
 {
-  int* flags = (int*)malloc(16);
+  //characteristics = malloc(sizeof(uint32_t) * 16);
+  
+  if(characteristics == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    return EXIT_FAILURE;
+  }
+  
   int i = 0;
   
   for(i=0;i<16;i++)
   {
     if((pe_opt_head->DllCharacteristics & (1 << i)) == (1 << i))
     {
-      flags[i] = 1;
+      characteristics[i] = 1;
     }
   }
 
-  return flags;
+  return EXIT_SUCCESS;
 }
 
 void print_dll_characteristics(int* flags)

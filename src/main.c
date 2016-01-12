@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <errno.h>
 #include <string.h>
 #include <inttypes.h>
 
@@ -24,10 +25,9 @@ int main(int argc, char** argv)
   long size = 0;
   char* data;
 
-  if(!file)
+  if(file == NULL)
   {
     fprintf(stderr, "[ERROR] Failed to open file.\n");
-
     return EXIT_FAILURE;
   }
 
@@ -40,6 +40,7 @@ int main(int argc, char** argv)
   if(data == NULL)
   {
     fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    return EXIT_FAILURE;
   }
 
   int bytes_read = fread(data, sizeof(char), size, file);
@@ -88,17 +89,42 @@ int main(int argc, char** argv)
 
   time_t timestamp = (time_t)u.pe_head->TimeDateStamp;
 
+  char* machine_type = malloc(sizeof(char) * 128);
+  
+  if(machine_type == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory. System said: %s\n", strerror(errno));
+    return EXIT_FAILURE;
+  }
+  
+  read_machine_type(u.pe_head, machine_type);
+  
   printf("%s:\n\n", argv[1]);
   printf("PE HEADER INFORMATION\n");
-  printf("Machine: %s\n", read_machine_type(u.pe_head));
+  printf("Machine: %s\n", machine_type);
+  
+  free(machine_type);
+  
   printf("NumberOfSections: %d\n", u.pe_head->NumberOfSections);
   printf("TimeDateStamp: %s", ctime(&timestamp));
   printf("PointerToSymbolTable: %#x\n", u.pe_head->PointerToSymbolTable);
   printf("NumberOfSymbols: %d\n", u.pe_head->NumberOfSymbols);
   printf("SizeOfOptionalHeader: %d\n", u.pe_head->SizeOfOptionalHeader);
   printf("Characteristics:\n");
-  print_characteristics(read_characteristics(u.pe_head));
-
+  
+  
+  int* characteristics = malloc(sizeof(uint32_t) * 16);
+  
+  if(characteristics == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    return EXIT_FAILURE;
+  }
+  
+  read_characteristics(u.pe_head, characteristics);
+  print_characteristics(characteristics);
+  free(characteristics);
+  
   if(u.pe_head->SizeOfOptionalHeader > 0)
   {
     printf("\nPE OPTIONAL HEADER INFORMATION ");
@@ -152,7 +178,20 @@ int main(int argc, char** argv)
       printf("CheckSum: %d\n", w.pe_opt_head->CheckSum);
       printf("Subsystem: %s\n", read_windows_subsystem_pe32(w.pe_opt_head));
       printf("DLLCharacteristics:\n");
-      print_dll_characteristics(read_dll_characteristics_pe32(w.pe_opt_head));
+      
+      int* dll_flags = malloc(sizeof(uint32_t) * 16);
+      
+      if(dll_flags == NULL)
+      {
+        fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    
+        return EXIT_FAILURE;
+      }
+      
+      read_dll_characteristics_pe32(w.pe_opt_head, dll_flags);
+      print_dll_characteristics(dll_flags);
+      free(dll_flags);
+      
       printf("SizeOfStackReserve: %d\n", w.pe_opt_head->SizeOfStackReserve);
       printf("SizeOfStackCommit: %d\n", w.pe_opt_head->SizeOfStackCommit);
       printf("SizeOfHeapReserve: %d\n", w.pe_opt_head->SizeOfHeapReserve);
@@ -245,7 +284,20 @@ int main(int argc, char** argv)
       printf("CheckSum: %d\n", w.pe_opt_head->CheckSum);
       printf("Subsystem: %s\n", read_windows_subsystem_pe32_plus(w.pe_opt_head));
       printf("DLLCharacteristics:\n");
-      print_dll_characteristics(read_dll_characteristics_pe32_plus(w.pe_opt_head));
+      
+      int* dll_flags = malloc(sizeof(uint32_t) * 16);
+      
+      if(dll_flags == NULL)
+      {
+        fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    
+        return EXIT_FAILURE;
+      }
+      
+      read_dll_characteristics_pe32_plus(w.pe_opt_head, dll_flags);
+      print_dll_characteristics(dll_flags);
+      free(dll_flags);
+      
       printf("SizeOfStackReserve: %" PRId64 "\n", w.pe_opt_head->SizeOfStackReserve);
       printf("SizeOfStackCommit: %" PRId64 "\n", w.pe_opt_head->SizeOfStackCommit);
       printf("SizeOfHeapReserve: %" PRId64 "\n", w.pe_opt_head->SizeOfHeapReserve);
