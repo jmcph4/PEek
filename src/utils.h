@@ -5,6 +5,8 @@
 #include "headers.h"
 #include "codes.h"
 
+#define DEFAULT_STR_LEN 128
+
 // Returns a C string containing a human-readable description of machine type
 int read_machine_type(PE_Header* pe_head, char* machine_type)
 {
@@ -84,90 +86,94 @@ int read_machine_type(PE_Header* pe_head, char* machine_type)
   return EXIT_SUCCESS;
 }
 
-char* read_windows_subsystem_pe32(PE_Optional_Header* pe_opt_head)
+int read_windows_subsystem_pe32(PE_Optional_Header* pe_opt_head, char* subsystem)
 {
   switch(pe_opt_head->Subsystem)
   {
     case 0:
-      return IMAGE_SUBSYSTEM_UNKNOWN;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_UNKNOWN, strlen(IMAGE_SUBSYSTEM_UNKNOWN));
       break;
     case 1:
-      return IMAGE_SUBSYSTEM_NATIVE;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_NATIVE, strlen(IMAGE_SUBSYSTEM_NATIVE));
       break;
     case 2:
-      return IMAGE_SUBSYSTEM_WINDOWS_GUI;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_WINDOWS_GUI, strlen(IMAGE_SUBSYSTEM_WINDOWS_GUI));
       break;
     case 3:
-      return IMAGE_SUBSYSTEM_WINDOWS_CUI;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_WINDOWS_CUI, strlen(IMAGE_SUBSYSTEM_WINDOWS_CUI));
       break;
     case 7:
-      return IMAGE_SUBSYSTEM_POSIX_CUI;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_POSIX_CUI, strlen(IMAGE_SUBSYSTEM_POSIX_CUI));
       break;
     case 9:
-      return IMAGE_SUBSYSTEM_WINDOWS_CE_GUI;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_WINDOWS_CE_GUI, strlen(IMAGE_SUBSYSTEM_WINDOWS_CE_GUI));
       break;
     case 10:
-      return IMAGE_SUBSYSTEM_EFI_APPLICATION;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_APPLICATION, strlen(IMAGE_SUBSYSTEM_EFI_APPLICATION));
       break;
     case 11:
-      return IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER, strlen(IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER));
       break;
     case 12:
-      return IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER, strlen(IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER));
       break;
     case 13:
-      return IMAGE_SUBSYSTEM_EFI_ROM;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_ROM, strlen(IMAGE_SUBSYSTEM_EFI_ROM));
       break;
     case 14:
-      return IMAGE_SUBSYSTEM_XBOX;
+      strncpy(subsystem, IMAGE_SUBSYSTEM_XBOX, strlen(IMAGE_SUBSYSTEM_XBOX));
       break;
     default:
-      return "...";
+      strncpy(subsystem, "...", strlen("..."));
       break;
   }
+  
+  return EXIT_SUCCESS;
 }
 
-char* read_windows_subsystem_pe32_plus(PE_Optional_Header_Plus* pe_opt_head)
+int read_windows_subsystem_pe32_plus(PE_Optional_Header_Plus* pe_opt_head, char* subsystem)
 {
   switch(pe_opt_head->Subsystem)
   {
     case 0:
-      return "IMAGE_SUBSYSTEM_UNKNOWN";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_UNKNOWN, strlen(IMAGE_SUBSYSTEM_UNKNOWN));
       break;
     case 1:
-      return "IMAGE_SUBSYSTEM_NATIVE";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_NATIVE, strlen(IMAGE_SUBSYSTEM_NATIVE));
       break;
     case 2:
-      return "IMAGE_SUBSYSTEM_WINDOWS_GUI";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_WINDOWS_GUI, strlen(IMAGE_SUBSYSTEM_WINDOWS_GUI));
       break;
     case 3:
-      return "IMAGE_SUBSYSTEM_WINDOWS_CUI";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_WINDOWS_CUI, strlen(IMAGE_SUBSYSTEM_WINDOWS_CUI));
       break;
     case 7:
-      return "IMAGE_SUBSYSTEM_POSIX_CUI";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_POSIX_CUI, strlen(IMAGE_SUBSYSTEM_POSIX_CUI));
       break;
     case 9:
-      return "IMAGE_SUBSYSTEM_WINDOWS_CE_GUI";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_WINDOWS_CE_GUI, strlen(IMAGE_SUBSYSTEM_WINDOWS_CE_GUI));
       break;
     case 10:
-      return "IMAGE_SUBSYSTEM_EFI_APPLICATION";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_APPLICATION, strlen(IMAGE_SUBSYSTEM_EFI_APPLICATION));
       break;
     case 11:
-      return "IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER, strlen(IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER));
       break;
     case 12:
-      return "IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER, strlen(IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER));
       break;
     case 13:
-      return "IMAGE_SUBSYSTEM_EFI_ROM";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_EFI_ROM, strlen(IMAGE_SUBSYSTEM_EFI_ROM));
       break;
     case 14:
-      return "IMAGE_SUBSYSTEM_XBOX";
+      strncpy(subsystem, IMAGE_SUBSYSTEM_XBOX, strlen(IMAGE_SUBSYSTEM_XBOX));
       break;
     default:
-      return "...";
+      strncpy(subsystem, "...", strlen("..."));
       break;
   }
+  
+  return EXIT_SUCCESS;
 }
 
 int read_characteristics(PE_Header* pe_head, int* characteristics)

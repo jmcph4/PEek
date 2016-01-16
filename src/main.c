@@ -89,22 +89,43 @@ int main(int argc, char** argv)
 
   time_t timestamp = (time_t)u.pe_head->TimeDateStamp;
 
-  char* machine_type = malloc(sizeof(char) * 128);
+  /***************************************************************************/
   
+  // allocate memory for required information
+  char* machine_type = malloc(sizeof(char) * DEFAULT_STR_LEN);
+  int* characteristics = malloc(sizeof(uint32_t) * 16);
+  char* subsystem = malloc(sizeof(char) * DEFAULT_STR_LEN);
+  int* dll_flags = malloc(sizeof(uint32_t) * 16);
+  
+  // handle any errors resulting from memory allocation
   if(machine_type == NULL)
   {
     fprintf(stderr, "[ERROR] Failed to allocate memory. System said: %s\n", strerror(errno));
     return EXIT_FAILURE;
   }
   
+  if(characteristics == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    return EXIT_FAILURE;
+  }
+      
+  if(dll_flags == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
+    
+    return EXIT_FAILURE;
+  }
+  
+  // read required information into respective variables
   read_machine_type(u.pe_head, machine_type);
+  read_characteristics(u.pe_head, characteristics);
+  
+  /***************************************************************************/
   
   printf("%s:\n\n", argv[1]);
   printf("PE HEADER INFORMATION\n");
   printf("Machine: %s\n", machine_type);
-  
-  free(machine_type);
-  
   printf("NumberOfSections: %d\n", u.pe_head->NumberOfSections);
   printf("TimeDateStamp: %s", ctime(&timestamp));
   printf("PointerToSymbolTable: %#x\n", u.pe_head->PointerToSymbolTable);
@@ -112,24 +133,14 @@ int main(int argc, char** argv)
   printf("SizeOfOptionalHeader: %d\n", u.pe_head->SizeOfOptionalHeader);
   printf("Characteristics:\n");
   
-  
-  int* characteristics = malloc(sizeof(uint32_t) * 16);
-  
-  if(characteristics == NULL)
-  {
-    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
-    return EXIT_FAILURE;
-  }
-  
-  read_characteristics(u.pe_head, characteristics);
   print_characteristics(characteristics);
-  free(characteristics);
   
   if(u.pe_head->SizeOfOptionalHeader > 0)
   {
     printf("\nPE OPTIONAL HEADER INFORMATION ");
 
     int opt_head_start = *t.num + (24 * sizeof(char));
+    
     //int opt_head_end = opt_head_start + u.pe_head->SizeOfOptionalHeader;
     
     char magic_str[2] = {data[opt_head_start], data[opt_head_start+1]};
@@ -155,6 +166,10 @@ int main(int argc, char** argv)
 
       w.data = &data[opt_head_start];
       
+      // read PE32-specific information
+      read_windows_subsystem_pe32(w.pe_opt_head, subsystem);
+      read_dll_characteristics_pe32(w.pe_opt_head, dll_flags);
+      
       printf("MajorLinkerVersion: %d\n", w.pe_opt_head->MajorLinkerVersion);
       printf("MinorLinkerVersion: %d\n", w.pe_opt_head->MinorLinkerVersion);
       printf("SizeOfCode: %d\n", w.pe_opt_head->SizeOfCode);
@@ -176,21 +191,10 @@ int main(int argc, char** argv)
       printf("SizeOfImage: %d\n", w.pe_opt_head->SizeOfImage);
       printf("SizeOfHeaders: %d\n", w.pe_opt_head->SizeOfHeaders);
       printf("CheckSum: %d\n", w.pe_opt_head->CheckSum);
-      printf("Subsystem: %s\n", read_windows_subsystem_pe32(w.pe_opt_head));
+      printf("Subsystem: %s\n", subsystem);
       printf("DLLCharacteristics:\n");
       
-      int* dll_flags = malloc(sizeof(uint32_t) * 16);
-      
-      if(dll_flags == NULL)
-      {
-        fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
-    
-        return EXIT_FAILURE;
-      }
-      
-      read_dll_characteristics_pe32(w.pe_opt_head, dll_flags);
       print_dll_characteristics(dll_flags);
-      free(dll_flags);
       
       printf("SizeOfStackReserve: %d\n", w.pe_opt_head->SizeOfStackReserve);
       printf("SizeOfStackCommit: %d\n", w.pe_opt_head->SizeOfStackCommit);
@@ -261,6 +265,10 @@ int main(int argc, char** argv)
 
       w.data = &data[opt_head_start];
       
+      // read PE32+-specific information
+      read_windows_subsystem_pe32_plus(w.pe_opt_head, subsystem);
+      read_dll_characteristics_pe32_plus(w.pe_opt_head, dll_flags);
+      
       printf("MajorLinkerVersion: %d\n", w.pe_opt_head->MajorLinkerVersion);
       printf("MinorLinkerVersion: %d\n", w.pe_opt_head->MinorLinkerVersion);
       printf("SizeOfCode: %d\n", w.pe_opt_head->SizeOfCode);
@@ -282,21 +290,10 @@ int main(int argc, char** argv)
       printf("SizeOfImage: %d\n", w.pe_opt_head->SizeOfImage);
       printf("SizeOfHeaders: %d\n", w.pe_opt_head->SizeOfHeaders);
       printf("CheckSum: %d\n", w.pe_opt_head->CheckSum);
-      printf("Subsystem: %s\n", read_windows_subsystem_pe32_plus(w.pe_opt_head));
+      printf("Subsystem: %s\n", subsystem);
       printf("DLLCharacteristics:\n");
       
-      int* dll_flags = malloc(sizeof(uint32_t) * 16);
-      
-      if(dll_flags == NULL)
-      {
-        fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
-    
-        return EXIT_FAILURE;
-      }
-      
-      read_dll_characteristics_pe32_plus(w.pe_opt_head, dll_flags);
       print_dll_characteristics(dll_flags);
-      free(dll_flags);
       
       printf("SizeOfStackReserve: %" PRId64 "\n", w.pe_opt_head->SizeOfStackReserve);
       printf("SizeOfStackCommit: %" PRId64 "\n", w.pe_opt_head->SizeOfStackCommit);
@@ -356,6 +353,12 @@ int main(int argc, char** argv)
     }
   }
 
+  // free allocations for respective variables
+  free(machine_type);
+  free(characteristics);
+  free(subsystem);
+  free(dll_flags);
+  
   free(data);
   
   return EXIT_SUCCESS;
