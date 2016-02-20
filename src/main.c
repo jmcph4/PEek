@@ -19,6 +19,8 @@ int main(int argc, char** argv)
     // usage
     printf("Usage: %s file\n", argv[0]);
   }
+  
+  int i = 0;
 
   const char* filename = argv[1];
   FILE* file = fopen(filename, "rb");
@@ -351,14 +353,76 @@ int main(int argc, char** argv)
       printf("    RVA: %#x\n", w.pe_opt_head->reserved.RVA);
       printf("    Size: %d\n", w.pe_opt_head->reserved.Size);
     }
+    
+  Section_Header* section_table;
+  
+  if(u.pe_head->NumberOfSections > 0)
+  {
+    section_table = malloc(u.pe_head->NumberOfSections * sizeof(Section_Header));
+  }
+  
+  if(section_table == NULL)
+  {
+    fprintf(stderr, "[ERROR] Failed to allocate memory. System said: %s\n", strerror(errno));
+    return EXIT_FAILURE;
+  }
+  
+  union 
+  {
+    char* data;
+    Section_Header* secttab;
+  }s;
+  
+  if(*v.magic == 0x10b)
+  {
+    s.data = &data[*t.num + sizeof(PE_Header) + sizeof(PE_Optional_Header)];
+  }
+  else if(*v.magic == 0x20b)
+  {
+    s.data = &data[*t.num + sizeof(PE_Header) + sizeof(PE_Optional_Header_Plus)];
+  }
+  
+  
+  i = 0;
+  unsigned int j = 0;
+  
+  for(i=0;i<u.pe_head->NumberOfSections;i++)
+  {
+    printf("Name: ");
+    
+    union
+    {
+      uint64_t* name;
+      uint8_t* seq;
+    }name_seq;
+    
+    name_seq.name = &s.secttab[i].Name;
+    
+    for(j=0;j<8;j++)
+    {
+      printf("%c", name_seq.seq[j]);
+    }
+    
+    printf("\n");
+    
+    printf("VirtualSize: %x" PRId32 "\n", s.secttab[i].VirtualSize);
+    printf("VirtualAddress: %x" PRId32 "\n", s.secttab[i].VirtualAddress);
+    printf("SizeOfRawData: %" PRId32 "\n", s.secttab[i].SizeOfRawData);
+    printf("PointerToRawData: %x" PRId32 "\n", s.secttab[i].PointerToRawData);
+    printf("PointerToRelocations: %x" PRId32 "\n", s.secttab[i].PointerToRelocations);
+    printf("PointerToLinenumbers: %x" PRId32 "\n", s.secttab[i].PointerToLinenumbers);
+    printf("NumberOfRelocations: %" PRId16 "\n", s.secttab[i].NumberOfRelocations);
+    printf("NumberOfLinenumbers: %" PRId16 "\n", s.secttab[i].NumberOfLinenumbers);
+    printf("\n");
+  }
+    
   }
 
   // free allocations for respective variables
   free(machine_type);
   free(characteristics);
   free(subsystem);
-  free(dll_flags);
-  
+  free(dll_flags);  
   free(data);
   
   return EXIT_SUCCESS;
