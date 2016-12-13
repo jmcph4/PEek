@@ -100,22 +100,9 @@ int main(int argc, char** argv)
   int* dll_flags = malloc(sizeof(uint32_t) * 16);
   
   // handle any errors resulting from memory allocation
-  if(machine_type == NULL)
+  if(machine_type == NULL || characteristics == NULL || subsystem == NULL || dll_flags == NULL)
   {
     fprintf(stderr, "[ERROR] Failed to allocate memory. System said: %s\n", strerror(errno));
-    return EXIT_FAILURE;
-  }
-  
-  if(characteristics == NULL)
-  {
-    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
-    return EXIT_FAILURE;
-  }
-      
-  if(dll_flags == NULL)
-  {
-    fprintf(stderr, "[ERROR] Failed to allocate memory.\n");
-    
     return EXIT_FAILURE;
   }
   
@@ -381,7 +368,6 @@ int main(int argc, char** argv)
   {
     s.data = &data[*t.num + sizeof(PE_Header) + sizeof(PE_Optional_Header_Plus)];
   }
-  
   
   i = 0;
   unsigned int j = 0;
